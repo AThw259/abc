@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Fake call demo</title>
+  <style>
+    body { margin: 0; min-height: 100vh; font-family: system-ui, sans-serif; color: #1f2937;
+      background: #e8efe9 linear-gradient(#d9e4dc 1px, transparent 1px) 0 0 / 100% 48px; }
+    main { max-width: 420px; margin: 0 auto; padding: 24px 16px 120px; }
+    h1 { font-size: 22px; margin: 0 0 6px; }
+    p { line-height: 1.45; }
+    .card { background: #fff; border-radius: 14px; padding: 14px 16px; margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+    button.demo { min-height: 48px; padding: 0 18px; border: 0; border-radius: 12px; background: #b91c1c; color: #fff; font-size: 16px; font-weight: 600; margin: 4px 8px 4px 0; }
+    button.alt { background: #374151; }
+    code { background: #f3f4f6; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+    #phase { font-weight: 600; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Fake call: demo page</h1>
+    <p>Stand-in for your real map screen. The purple "Fake call" button (bottom-left) is the module's own floating button.</p>
+
+    <div class="card">
+      <p><strong>Wiring it to your own "I Feel Unsafe" button:</strong></p>
+      <button class="demo" id="unsafe" type="button">I feel unsafe</button>
+      <button class="demo alt" id="quick" type="button">Call from Mom now</button>
+      <p>Call state: <span id="phase">idle</span></p>
+    </div>
+  </main>
+
+  <script src="fake-call.js" defer data-position="left"></script>
+  <script>
+    document.getElementById('unsafe').addEventListener('click', function () { window.FakeCall.open(); });
+    document.getElementById('quick').addEventListener('click', function () { window.FakeCall.start('mom', { delay: 0 }); });
+    window.addEventListener('fakecall', function (e) { document.getElementById('phase').textContent = e.detail.phase; });
+  </script>
+</body>
+</html>

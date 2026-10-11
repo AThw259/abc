@@ -1,0 +1,50 @@
+/* Mobile-first refinements for the navigation-style SafeRoute web UI. */
+@media (max-width: 899px) {
+  :root { --sheet-collapsed: 202px; }
+  .route-sheet { height: 76dvh; }
+  .route-sheet.expanded { height: 82dvh; }
+  .unsafe-fab { right: 14px; bottom: calc(var(--sheet-collapsed) + 14px); padding: 9px 12px; }
+  .unsafe-actions { left: 14px; right: 82px; width: auto; bottom: calc(var(--sheet-collapsed) + 14px); transform: translateY(14px); }
+  body.unsafe-mode .unsafe-actions { transform: translateY(0); }
+  .connectivity-mini { bottom: calc(var(--sheet-collapsed) + 15px); }
+  .map-side-controls { top: calc(158px + env(safe-area-inset-top)); }
+}
+
+@media (max-width: 600px) {
+  .search-card { width: calc(100% - 20px); top: calc(8px + env(safe-area-inset-top)); border-radius: 16px; }
+  .search-line { min-height: 43px; }
+  .search-line input { font-size: 14px; padding: 9px 4px; }
+  .planner-actions { gap: 7px; }
+  .route-plan-button { padding: 8px 11px !important; font-size: 12px; }
+  #status { font-size: 9px; }
+  .map-top-controls { top: calc(132px + env(safe-area-inset-top)); left: 10px; }
+  .map-side-controls { right: 10px; top: calc(148px + env(safe-area-inset-top)); }
+  .map-circle { width: 40px; height: 40px; }
+  .leaflet-control-zoom { display: none; }
+  .route-sheet-header { padding-left: 14px; padding-right: 14px; }
+  .route-carousel-wrap { grid-template-columns: 24px 1fr 24px; padding-left: 2px; padding-right: 2px; }
+  .route-arrow { width: 24px; font-size: 24px; }
+  .route { flex-basis: 94%; padding: 11px 12px; }
+  .route-title { font-size: 14px; }
+  .route-score { font-size: 20px; }
+  .route-details { padding-left: 14px; padding-right: 14px; }
+  .score-grid { grid-template-columns: 1fr 1fr; }
+  .haven-list { grid-template-columns: 1fr; }
+  .tiny-note { display: none; }
+  .unsafe-fab-label { display: none; }
+  .unsafe-fab { width: 50px; height: 50px; padding: 0; justify-content: center; }
+  .unsafe-fab-icon { width: 32px; height: 32px; }
+  .unsafe-actions { right: 75px; grid-template-columns: repeat(3,1fr); gap: 7px; }
+  .safety-action { min-height: 58px; border-radius: 14px; }
+  .safety-action span { font-size: 17px; }
+  .safety-action strong { font-size: 9px; }
+  .connectivity-mini { left: 10px; max-width: calc(100% - 84px); }
+  dialog { margin: auto 10px calc(10px + env(safe-area-inset-bottom)); width: calc(100% - 20px); max-height: 86dvh; overflow-y: auto; border-radius: 20px; }
+}
+
+@media (max-width: 370px) {
+  .map-chip { padding: 7px 9px; font-size: 9px; }
+  .route-sheet-header h1 { font-size: 15px; }
+  .route-count { display: none; }
+  .score-grid { grid-template-columns: 1fr; }
+}

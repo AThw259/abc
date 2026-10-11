@@ -1,0 +1,16 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {distance, distanceToRoute, scoreRoute, reportWeight, category, levels} from '../js/scoring.js';
+const now=1800000000000, day=86400000;
+const route={points:[[0,0],[0,.01]]};
+const report=(type,age=0)=>({type,position:[0,.005],created:now-age*day});
+const score=(reports=[],evidence={},count=0)=>scoreRoute(route,Array.from({length:count},()=>({position:[0,.005],type:'police',hours:'24/7'})),reports,evidence,now);
+test('distance and segment interior proximity',()=>{assert.ok(Math.abs(distance([0,0],[0,.01])-1112)<2);assert.ok(distanceToRoute([.001,.005],route.points)<112);});
+test('unknown factors and empty reports stay neutral',()=>{const r=score();assert.equal(r.score,50);assert.deepEqual(r.unknown,['lighting','connectivity','crime']);assert.equal(r.connectivity,null);});
+test('safe place weights without a cap',()=>{for(const [n,expected] of [[0,50],[1,55],[2,60],[3,65],[9,95]])assert.equal(score([],{},n).score,expected);});
+test('each documented factor level',()=>{for(const [factor,table] of Object.entries(levels))for(const [level,points] of Object.entries(table))assert.equal(score([],{[factor]:level}).score,50+points);});
+test('community severity, cap and positive feedback',()=>{for(const [type,points] of [['lighting',-3],['isolated',-5],['construction',-2],['harassment',-10],['positive',5]])assert.equal(score([report(type)]).score,50+points);assert.equal(score([report('harassment'),report('harassment'),report('positive')]).score,35);assert.equal(score([report('positive'),report('positive')]).score,55);});
+test('report age boundaries and weighted penalties',()=>{for(const [age,weight] of [[0,1],[.99,1],[1,.75],[6.99,.75],[7,.4],[30,.4],[30.01,0],[-1,0]])assert.equal(reportWeight(now-age*day,now),weight);assert.equal(reportWeight(undefined,now),0);assert.equal(score([report('harassment',2)]).breakdown.community,-7.5);assert.equal(score([report('harassment',31)]).score,50);});
+test('remote reports and expired positives do not affect routes',()=>{assert.equal(score([{...report('harassment'),position:[1,1]}]).score,50);assert.equal(score([report('positive',31)]).score,50);});
+test('criteria example B and bounds',()=>{assert.equal(score([],{lighting:'very_well_lit',crimePoints:-3,connectivity:'strong'},3).score,87);assert.equal(score([report('positive')],{lighting:'very_well_lit',crimePoints:0,connectivity:'strong'},3).score,95);assert.equal(score([report('harassment'),report('harassment')],{lighting:'very_dark',crimePoints:-100,connectivity:'dead_zone'}).score,0);});
+test('category boundaries',()=>{for(const [value,label] of [[0,'Higher Caution'],[39,'Higher Caution'],[40,'Caution'],[54,'Caution'],[55,'Moderate'],[69,'Moderate'],[70,'Safer'],[84,'Safer'],[85,'Excellent'],[100,'Excellent']])assert.equal(category(value),label);});

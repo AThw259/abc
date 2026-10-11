@@ -1,0 +1,189 @@
+/* Tether Fake Call - styles. Everything is scoped under .fc-root so it will not
+   touch the rest of your app. Change the accent colour with:
+     :root { --fc-accent: #0f766e; }                                           */
+
+.fc-root {
+  --fc-accent: #4f46e5;
+  --fc-accent-text: #ffffff;
+  --fc-bg: #ffffff;
+  --fc-fg: #111827;
+  --fc-muted: #6b7280;
+  --fc-line: #e5e7eb;
+  --fc-chip: #f3f4f6;
+  --fc-green: #34c759;
+  --fc-red: #ff3b30;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  .fc-root {
+    --fc-bg: #1c1c22;
+    --fc-fg: #f3f4f6;
+    --fc-muted: #9ca3af;
+    --fc-line: #2f2f38;
+    --fc-chip: #2a2a33;
+  }
+}
+
+.fc-root *, .fc-root *::before, .fc-root *::after { box-sizing: border-box; }
+.fc-root [hidden] { display: none !important; }
+.fc-root button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+.fc-root button:focus-visible, .fc-root input:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+
+/* ---------- floating button ---------- */
+.fc-fab {
+  position: fixed;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 2147482000;
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 52px; padding: 0 20px 0 16px;
+  border: 0; border-radius: 26px;
+  background: var(--fc-accent); color: var(--fc-accent-text);
+  font-size: 16px; font-weight: 600;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .28);
+}
+.fc-fab.fc-right { right: calc(16px + env(safe-area-inset-right, 0px)); }
+.fc-fab.fc-left { left: calc(16px + env(safe-area-inset-left, 0px)); }
+.fc-fab:active { transform: scale(.97); }
+.fc-fab svg { flex: none; }
+
+/* ---------- options sheet ---------- */
+.fc-backdrop {
+  position: fixed; inset: 0; z-index: 2147482500;
+  display: flex; align-items: flex-end; justify-content: center;
+  background: rgba(0, 0, 0, .5);
+}
+.fc-sheet {
+  width: 100%; max-width: 480px; max-height: 92vh; overflow-y: auto;
+  padding: 20px 18px calc(18px + env(safe-area-inset-bottom, 0px));
+  border-radius: 20px 20px 0 0;
+  background: var(--fc-bg); color: var(--fc-fg);
+  animation: fc-up .22s ease-out;
+}
+@media (min-width: 520px) {
+  .fc-backdrop { align-items: center; }
+  .fc-sheet { border-radius: 20px; }
+}
+@keyframes fc-up { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.fc-sheet h2 { margin: 0 0 4px; font-size: 20px; line-height: 1.25; }
+.fc-sub { margin: 0 0 16px; font-size: 14px; line-height: 1.4; color: var(--fc-muted); }
+.fc-label { margin: 14px 0 8px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--fc-muted); }
+
+.fc-chips { display: flex; gap: 8px; }
+.fc-chip {
+  flex: 1; min-height: 44px; padding: 8px 10px;
+  border: 2px solid transparent; border-radius: 12px;
+  background: var(--fc-chip); font-size: 15px; font-weight: 600;
+}
+.fc-chip[aria-checked="true"] { border-color: var(--fc-accent); background: transparent; color: var(--fc-accent); }
+
+.fc-personas { display: flex; flex-direction: column; gap: 8px; }
+.fc-persona {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  min-height: 64px; padding: 10px 12px;
+  border: 1px solid var(--fc-line); border-radius: 14px;
+  background: transparent; text-align: left;
+}
+.fc-persona:active { background: var(--fc-chip); }
+.fc-ptext { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.fc-ptext strong { font-size: 16px; }
+.fc-ptext small { font-size: 13px; line-height: 1.3; color: var(--fc-muted); }
+.fc-go {
+  flex: none; padding: 8px 14px; border-radius: 999px;
+  background: var(--fc-accent); color: var(--fc-accent-text);
+  font-size: 14px; font-weight: 600;
+}
+
+.fc-avatar {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: #6b7280; color: #fff; font-size: 18px; font-weight: 600;
+}
+.fc-avatar-lg { width: 96px; height: 96px; font-size: 40px; }
+
+.fc-check { display: flex; align-items: center; gap: 10px; margin-top: 16px; font-size: 14px; min-height: 32px; }
+.fc-check input { width: 20px; height: 20px; accent-color: var(--fc-accent); }
+.fc-note { margin: 12px 0 0; font-size: 12.5px; line-height: 1.45; color: var(--fc-muted); }
+.fc-error { margin: 10px 0 0; padding: 10px 12px; border-radius: 10px; background: #fef2f2; color: #991b1b; font-size: 13.5px; line-height: 1.4; }
+.fc-close {
+  display: block; width: 100%; margin-top: 14px; min-height: 46px;
+  border: 0; border-radius: 12px; background: var(--fc-chip); font-size: 15px; font-weight: 600;
+}
+
+/* ---------- "ringing in N s" pill ---------- */
+.fc-pill {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  top: calc(12px + env(safe-area-inset-top, 0px)); z-index: 2147482600;
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 8px 8px 16px; border-radius: 999px;
+  background: #111827; color: #fff; font-size: 14px; font-weight: 600;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .35);
+}
+.fc-pill button {
+  min-height: 34px; padding: 0 14px; border: 0; border-radius: 999px;
+  background: rgba(255, 255, 255, .18); color: #fff; font-size: 14px; font-weight: 600;
+}
+
+/* ---------- call screen ---------- */
+.fc-call {
+  position: fixed; inset: 0; z-index: 2147483000;
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  padding: calc(56px + env(safe-area-inset-top, 0px)) 24px calc(40px + env(safe-area-inset-bottom, 0px));
+  background: radial-gradient(120% 80% at 50% 0%, #3b3b4a 0%, #15151c 55%, #000 100%);
+  color: #fff; text-align: center;
+  animation: fc-fade .2s ease-out;
+}
+@keyframes fc-fade { from { opacity: 0; } to { opacity: 1; } }
+.fc-call-top { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+.fc-call .fc-avatar-lg { margin-bottom: 12px; }
+.fc-name { margin: 0; font-size: 34px; font-weight: 500; line-height: 1.15; word-break: break-word; }
+.fc-status { margin: 0; font-size: 19px; color: rgba(255, 255, 255, .7); font-variant-numeric: tabular-nums; min-height: 1.4em; }
+.fc-caption {
+  margin: 8px 0 0; max-width: 340px; padding: 10px 14px; border-radius: 12px;
+  background: rgba(255, 255, 255, .12); font-size: 16px; line-height: 1.4;
+}
+
+.fc-grid {
+  display: grid; grid-template-columns: repeat(3, 76px); gap: 18px 28px; justify-content: center;
+}
+.fc-tile { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12.5px; color: rgba(255, 255, 255, .85); }
+.fc-tile span:first-child {
+  display: flex; align-items: center; justify-content: center;
+  width: 64px; height: 64px; border-radius: 50%; background: rgba(255, 255, 255, .14);
+}
+.fc-tile svg { width: 26px; height: 26px; fill: #fff; }
+
+/* the real button in the grid: "next" (looks like the other tiles) */
+.fc-root button.fc-next { border: 0; background: none; padding: 0; color: rgba(255, 255, 255, .85); font-size: 12.5px; }
+.fc-next:active span:first-child { transform: scale(.94); }
+.fc-root button.fc-next:focus-visible { outline: none; }
+
+.fc-actions { display: flex; width: 100%; max-width: 340px; justify-content: space-around; align-items: flex-start; }
+.fc-act { display: flex; flex-direction: column; align-items: center; gap: 10px; border: 0; background: none; color: #fff; font-size: 14px; }
+.fc-act .fc-round {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  width: 74px; height: 74px; border-radius: 50%;
+}
+.fc-act svg { width: 32px; height: 32px; fill: #fff; }
+.fc-accept .fc-round { background: var(--fc-green); }
+.fc-decline .fc-round, .fc-end .fc-round { background: var(--fc-red); }
+.fc-decline svg, .fc-end svg { transform: rotate(135deg); }
+.fc-accept .fc-round::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  border: 3px solid var(--fc-green); animation: fc-pulse 1.4s ease-out infinite;
+}
+@keyframes fc-pulse { from { transform: scale(1); opacity: .8; } to { transform: scale(1.5); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .fc-accept .fc-round::after, .fc-sheet, .fc-call { animation: none; }
+}
+
+/* which parts show in which phase */
+.fc-call[data-phase="ringing"] .fc-grid,
+.fc-call[data-phase="ringing"] .fc-actions-active,
+.fc-call[data-phase="ringing"] .fc-caption { display: none; }
+.fc-call[data-phase="active"] .fc-actions-incoming,
+.fc-call[data-phase="ended"] .fc-actions-incoming,
+.fc-call[data-phase="ended"] .fc-actions-active,
+.fc-call[data-phase="ended"] .fc-grid { display: none; }

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="SafeRoute compares walking routes using safety, nearby public places, crime, community reports, and demo connectivity.">
+  <title>SafeRoute</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/style.css?v=maps-ui-3">
+  <link rel="stylesheet" href="css/phone.css?v=maps-ui-3">
+
+  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!--
+    Fake-call module from the uploaded fake-call folder.
+    data-button="false" hides its standalone floating button because SafeRoute
+    already has a Fake Call action inside I Feel Unsafe mode.
+    data-captions="true" shows what the caller is saying during the demo.
+  -->
+  <script src="fake-call/fake-call.js" defer data-button="false" data-captions="true"></script>
+
+  <script type="module" src="js/map.js?v=maps-ui-4"></script>
+</head>
+<body>
+  <main class="app-shell">
+    <section id="map-section" class="map-panel" aria-label="SafeRoute map">
+      <div id="map"></div>
+
+      <section class="search-card" aria-label="Route planner">
+        <div class="search-line origin-line">
+          <span class="search-marker origin-marker" aria-hidden="true"></span>
+          <input id="origin" value="Finding your location..." readonly aria-label="Starting point">
+          <button id="settings-button" class="icon-button" type="button" aria-label="Routing settings">⋮</button>
+        </div>
+
+        <form id="search-form" class="search-line destination-line">
+          <span class="search-marker destination-marker" aria-hidden="true"></span>
+          <input id="destination" placeholder="Where to?" required maxlength="200" autocomplete="off" aria-label="Destination">
+          <button type="submit" id="search-button" class="icon-button search-submit" aria-label="Search destination">⌕</button>
+        </form>
+
+        <div id="search-results" class="search-results"></div>
+
+        <div class="planner-actions">
+          <button id="plan" class="primary route-plan-button" type="button">Find routes</button>
+          <span id="status" role="status">Loading the map...</span>
+        </div>
+      </section>
+
+      <div class="map-top-controls">
+        <span id="mode-badge" class="map-chip">LIVE ROUTES</span>
+        <button id="fit" class="map-chip" type="button">⌖ Recenter</button>
+      </div>
+
+      <div class="map-side-controls">
+        <button id="report-button" class="map-circle" type="button" aria-label="Report a concern">＋</button>
+        <button id="refresh-havens" class="map-circle" type="button" aria-label="Refresh safe places">⌂</button>
+      </div>
+
+      <!-- Main safety-mode switch. The real inactivity timer only runs while this mode is active. -->
+      <button id="unsafe-button" class="unsafe-fab" type="button" aria-pressed="false">
+        <span class="unsafe-fab-icon">◉</span>
+        <span class="unsafe-fab-label">I feel unsafe</span>
+      </button>
+
+      <!-- Hackathon demo: uses a separate 10-second timer, then alarms and attempts tel:911. -->
+      <button id="demo-alarm-button" class="demo-alarm-fab" type="button" aria-label="Demo the no-movement alarm and emergency call flow after 10 seconds">
+        <span aria-hidden="true">▶</span>
+        <strong>Demo 10s</strong>
+      </button>
+
+      <!-- These quick actions are visible only in I Feel Unsafe mode. -->
+      <section id="unsafe-actions" class="unsafe-actions" aria-label="Safety actions" aria-hidden="true">
+        <button id="fake-call" class="safety-action fake" type="button">
+          <span>☎</span>
+          <strong>Fake Call</strong>
+        </button>
+        <button id="nearest" class="safety-action safe-place" type="button">
+          <span>⌖</span>
+          <strong>Safe Place</strong>
+        </button>
+        <button id="call-911" class="safety-action emergency" type="button">
+          <span>☎</span>
+          <strong>Call 911</strong>
+        </button>
+        <p id="unsafe-status" class="unsafe-status" aria-live="polite"></p>
+      </section>
+
+      <div class="connectivity-mini" title="Synthetic demo connectivity data">
+        <span class="connectivity-dot"></span>
+        Demo connectivity
+      </div>
+    </section>
+
+    <section id="route-options" class="route-sheet" aria-label="Route options">
+      <div id="sheet-handle" class="sheet-handle-area" role="button" tabindex="0" aria-label="Expand route details" aria-expanded="false">
+        <span class="sheet-handle"></span>
+      </div>
+
+      <div class="route-sheet-header">
+        <div>
+          <span class="sheet-kicker">ROUTES</span>
+          <h1 id="sheet-title">Choose a destination</h1>
+        </div>
+        <span id="route-count" class="route-count">0 ROUTES</span>
+      </div>
+
+      <div class="route-carousel-wrap">
+        <button id="routes-prev" class="route-arrow" type="button" aria-label="Previous route">‹</button>
+        <div id="routes" class="routes-carousel" role="group" aria-label="Available routes"></div>
+        <button id="routes-next" class="route-arrow" type="button" aria-label="Next route">›</button>
+      </div>
+
+      <div id="route-details" class="route-details">
+        <div class="empty-route-details">
+          <div class="empty-icon">↗</div>
+          <h2>Plan a route to compare safety</h2>
+          <p>Search for a destination above, then choose among the available walking routes.</p>
+        </div>
+      </div>
+
+      <section class="sheet-utility-section">
+        <div class="section-title-row">
+          <div>
+            <span class="sheet-kicker">SAFE PLACES</span>
+            <h2>Nearby Safe Havens (Preview)</h2>
+          </div>
+          <span id="haven-note" class="tiny-note">Live places have not been loaded yet.</span>
+        </div>
+        <div id="havens" class="haven-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="settings-dialog">
+    <form method="dialog">
+      <button class="close" aria-label="Close">×</button>
+      <h2>Routing options</h2>
+      <p>No API key is required for the default route service.</p>
+      <label for="api-key">OPTIONAL OPENROUTESERVICE API KEY</label>
+      <input id="api-key" type="password" autocomplete="off">
+      <button class="primary full" id="save-settings">Save</button>
+    </form>
+  </dialog>
+
+  <dialog id="report-dialog">
+    <form id="report-form">
+      <button type="button" class="close" data-close="report-dialog">×</button>
+      <h2>Report a concern</h2>
+      <p id="report-position" class="small"></p>
+      <label for="report-type">CONCERN</label>
+      <select id="report-type">
+        <option value="lighting">Poor lighting</option>
+        <option value="harassment">Harassment</option>
+        <option value="construction">Blocked sidewalk / construction</option>
+        <option value="isolated">Isolated area</option>
+        <option value="positive">Positive feedback</option>
+      </select>
+      <label for="report-note">NOTE</label>
+      <textarea id="report-note" maxlength="200"></textarea>
+      <button class="primary full">Save local report</button>
+    </form>
+  </dialog>
+
+  <dialog id="emergency-dialog" class="emergency-dialog">
+    <div class="emergency-dialog-content">
+      <button type="button" class="close" data-close="emergency-dialog">×</button>
+      <div class="emergency-symbol">!</div>
+      <h2>Call 911?</h2>
+      <p>This will open your phone's emergency calling flow.</p>
+      <div class="dialog-actions">
+        <button id="cancel-911" type="button" class="secondary">Cancel</button>
+        <button id="confirm-911" type="button" class="danger">Call 911</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="safety-check-dialog" class="safety-check-dialog">
+    <div class="safety-check-card">
+      <div class="emergency-symbol">!</div>
+      <span class="sheet-kicker danger-text">SAFETY CHECK</span>
+      <h2>Are you safe?</h2>
+      <p id="safety-check-message">No meaningful movement has been detected for 5 minutes.</p>
+      <div class="countdown-wrap">
+        <span>Emergency call attempt in</span>
+        <strong id="safety-countdown">30</strong>
+        <span>seconds</span>
+      </div>
+      <button id="im-safe" class="primary full" type="button">I'm Safe</button>
+      <button id="safety-call-911" class="danger full" type="button">Call 911 now</button>
+      <small>Movement monitoring is only active while I Feel Unsafe mode is on.</small>
+    </div>
+  </dialog>
+
+</body>
+</html>

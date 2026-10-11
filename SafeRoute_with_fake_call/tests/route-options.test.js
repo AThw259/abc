@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {distinctRoutes,detourPoints} from '../js/route-options.js';
+const feature=(coordinates,distance)=>({geometry:{coordinates},properties:{summary:{distance,duration:distance}}});
+const direct=feature([[0,0],[.01,0]],1100);
+const north=feature([[0,0],[0,.002],[.01,.002],[.01,0]],1550);
+test('duplicates are removed and genuinely different paths retained',()=>{assert.equal(distinctRoutes([direct,direct,north]).length,2);});
+test('rejects excessive detours',()=>{assert.equal(distinctRoutes([direct,{...north,properties:{summary:{distance:2500}}}]).length,1);});
+test('out and back spur does not count as a different route',()=>{const spur=feature([[0,0],[.005,0],[.005,.001],[.005,0],[.01,0]],1400);assert.equal(distinctRoutes([direct,spur]).length,1);});
+test('short walks skip forced detours, longer walks try both sides',()=>{assert.equal(detourPoints([0,0],[0,.001]).length,0);const points=detourPoints([0,0],[0,.01]);assert.equal(points.length,4);assert.ok(points.some(p=>p[0]>0)&&points.some(p=>p[0]<0));});

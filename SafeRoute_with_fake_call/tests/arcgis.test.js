@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {lightingEvidence,crimeEvidence} from '../js/arcgis.js';
+const route={points:[[0,0],[0,.001]]},now=1800000000000;
+const feature=(id,code='23A',date=now)=>({geometry:{x:.0005,y:0},attributes:{IncidentNumber:id,ReportDate:date,NibrsUcrCode:code}});
+test('empty datasets do not earn lighting or crime bonuses',()=>{assert.equal(lightingEvidence(route,[]).lighting,undefined);assert.equal(crimeEvidence(route,[],now).crimePoints,undefined);});
+test('crime ignores future, expired, and distant records',()=>{assert.equal(crimeEvidence(route,[feature('a','120',now+1),feature('b','120',now-31*86400000),{...feature('c','120'),geometry:{x:20,y:20}}],now).crimePoints,undefined);});
+test('crime deduplicates incidents and preserves serious offenses',()=>{assert.equal(crimeEvidence(route,[feature('a'),feature('a'),feature('a')],now).crimePoints,-3);assert.equal(crimeEvidence(route,[feature('a','120'),feature('a')],now).crimePoints,-6);});
+test('crime count tiers',()=>{assert.equal(crimeEvidence(route,[1,2,3].map(x=>feature(x)),now).crimePoints,-9);assert.equal(crimeEvidence(route,[1,2,3,4,5,6].map(x=>feature(x)),now).crimePoints,-18);});
+test('mapped-light proximity classifies dense inventory, sparse stays unknown',()=>{assert.equal(lightingEvidence(route,[0,.0003,.0006,.0009].map(x=>({geometry:{x,y:0}}))).lighting,'very_well_lit');assert.equal(lightingEvidence(route,[{geometry:{x:10,y:10}}]).lighting,undefined);});

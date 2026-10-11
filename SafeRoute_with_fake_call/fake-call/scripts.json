@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "modelId": "eleven_multilingual_v2",
+  "personas": [
+    {
+      "id": "mom",
+      "name": "Mom",
+      "blurb": "Checks where you are and says dinner is waiting",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "lang": "en-US",
+      "ttsPitch": 1.15,
+      "lines": [
+        { "id": "l01", "pauseBefore": 1200, "text": "Hi sweetheart! There you are. I was just about to text you." },
+        { "id": "l02", "pauseBefore": 3200, "text": "Where are you right now? Are you still on your way?" },
+        { "id": "l03", "pauseBefore": 3500, "text": "Okay, good. Keep walking, I'm watching the clock. Dinner's almost ready." },
+        { "id": "l04", "pauseBefore": 3800, "text": "Mm-hm. Yeah, no, that's fine. Just stay on the phone with me until you get here." },
+        { "id": "l05", "pauseBefore": 4000, "text": "Did you eat already? Because there's plenty." },
+        { "id": "l06", "pauseBefore": 4200, "text": "Right. Okay. How far is it now, like five minutes?" },
+        { "id": "l07", "pauseBefore": 3800, "text": "Perfect. I'll keep the porch light on. Don't hang up, okay?" }
+      ],
+      "fillers": [
+        { "id": "f01", "text": "Mm-hm." },
+        { "id": "f02", "text": "Yeah, I'm still here." },
+        { "id": "f03", "text": "Okay, keep walking." },
+        { "id": "f04", "text": "Uh-huh, I hear you." },
+        { "id": "f05", "text": "Almost there, right?" },
+        { "id": "f06", "text": "Alright, I'm right here." },
+        { "id": "f07", "text": "Okay. Good." }
+      ]
+    },
+    {
+      "id": "friend",
+      "name": "Alex",
+      "blurb": "A friend who is waiting out front for you",
+      "voiceId": "cjVigY5qzO86Huf0OWal",
+      "lang": "en-US",
+      "ttsPitch": 1.0,
+      "lines": [
+        { "id": "l01", "pauseBefore": 1200, "text": "Hey! Finally. I've been waiting out front for like ten minutes." },
+        { "id": "l02", "pauseBefore": 3000, "text": "Where are you? Which street are you on?" },
+        { "id": "l03", "pauseBefore": 3500, "text": "Okay, I know exactly where that is. You're really close. Just keep going straight." },
+        { "id": "l04", "pauseBefore": 3800, "text": "I'm right by the entrance. I'll wave when I see you." },
+        { "id": "l05", "pauseBefore": 4000, "text": "Yeah, no, take your time. I'm not going anywhere." },
+        { "id": "l06", "pauseBefore": 4200, "text": "Okay, I think I can see you down the block. Is that you?" },
+        { "id": "l07", "pauseBefore": 3800, "text": "Good. Stay on the phone till you get here, okay?" }
+      ],
+      "fillers": [
+        { "id": "f01", "text": "Yeah." },
+        { "id": "f02", "text": "Right, I'm listening." },
+        { "id": "f03", "text": "Okay, almost here." },
+        { "id": "f04", "text": "Mm-hm, keep going." },
+        { "id": "f05", "text": "I'm still here." },
+        { "id": "f06", "text": "Yep. No rush." },
+        { "id": "f07", "text": "Okay, good." }
+      ]
+    },
+    {
+      "id": "roommate",
+      "name": "Sam",
+      "blurb": "Your roommate, up and waiting by the door",
+      "voiceId": "iP95p4xoKVk53GoZ742B",
+      "lang": "en-US",
+      "ttsPitch": 0.9,
+      "lines": [
+        { "id": "l01", "pauseBefore": 1200, "text": "Hey, it's me. Are you almost home?" },
+        { "id": "l02", "pauseBefore": 3000, "text": "I figured. I'm up anyway, so I'll wait for you." },
+        { "id": "l03", "pauseBefore": 3500, "text": "Which way are you coming, past the corner store?" },
+        { "id": "l04", "pauseBefore": 3800, "text": "Okay, yeah, that's the right way. Perfect." },
+        { "id": "l05", "pauseBefore": 4000, "text": "I'm literally standing by the door. I'll unlock it when you're close." },
+        { "id": "l06", "pauseBefore": 4200, "text": "Yeah, stay on with me until you're here. No rush." },
+        { "id": "l07", "pauseBefore": 3800, "text": "Okay, so like two minutes. I'll be at the door." }
+      ],
+      "fillers": [
+        { "id": "f01", "text": "Yeah." },
+        { "id": "f02", "text": "Mm-hm, I'm here." },
+        { "id": "f03", "text": "Cool. Keep walking." },
+        { "id": "f04", "text": "Yep, I hear you." },
+        { "id": "f05", "text": "Okay, almost there." },
+        { "id": "f06", "text": "I'm still on." },
+        { "id": "f07", "text": "Alright." }
+      ]
+    }
+  ]
+}
